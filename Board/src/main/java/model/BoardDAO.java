@@ -52,7 +52,7 @@ public class BoardDAO {
 			
 		}
 		
-		String sql = "insert into board values(0,?,?,?,?,sysdate(),?,?,?,0,?)";
+		String sql = "insert into sys.board values(0,?,?,?,?,sysdate(),?,?,?,0,?)";
 		pstmt= con.prepareStatement(sql);
 		
 		
@@ -89,7 +89,7 @@ public class BoardDAO {
 			
 			try {
 				
-				String sql = "select * from board order by ref desc,re_step asc";
+				String sql = "select * from sys.board order by ref desc,re_step asc";
 				
 				pstmt = con.prepareStatement(sql);
 				
@@ -135,7 +135,7 @@ public class BoardDAO {
 		
 		try {
 			
-			String readsql = "update board set read_count = read_count+1 where num = ?";
+			String readsql = "update sys.board set read_count = read_count+1 where num = ?";
 			pstmt = con.prepareStatement(readsql);
 			pstmt.setInt(1, num);
 			
@@ -143,7 +143,7 @@ public class BoardDAO {
 			
 			
 			
-			String sql = "select * from board where num=?";
+			String sql = "select * from sys.board where num=?";
 			
 			pstmt = con.prepareStatement(sql);
 			
@@ -192,7 +192,7 @@ public class BoardDAO {
 		try {
 //////////////////////핵심 코드////////////////////////
 			//부모글보다 큰 re_level의 값을 전부 1씩 증가시켜준다. 
-			String levelsql = "update board set re_level = re_level+1 where ref=? and re_level>?";
+			String levelsql = "update sys.board set re_level = re_level+1 where ref=? and re_level>?";
 			
 			pstmt = con.prepareStatement(levelsql);
 			
@@ -201,7 +201,7 @@ public class BoardDAO {
 			
 			pstmt.executeUpdate();
 			//답변글 데이터를 저장 
-			String sql = "insert into board values(0,?,?,?,?,sysdate(),?,?,?,0,?)";
+			String sql = "insert into sys.board values(0,?,?,?,?,sysdate(),?,?,?,0,?)";
 			pstmt = con.prepareStatement(sql);
 			
 			pstmt.setString(1, bean.getWriter());
@@ -235,7 +235,7 @@ public class BoardDAO {
 		
 	}
 	
-	//boardUpdate용 하나의 게시글을 리턴 
+	//boardUpdate용 하나의 게시글을 리턴 // Delete시 하나의 게시글을 리턴 
 	
 	public BoardBean getOneUpdateBoard(int num) {
 		
@@ -246,7 +246,7 @@ public class BoardDAO {
 		try {
 			
 
-			String sql = "select * from board where num=?";
+			String sql = "select * from sys.board where num=?";
 			
 			pstmt = con.prepareStatement(sql);
 			
@@ -290,7 +290,7 @@ public class BoardDAO {
 		try {
 			
 			//쿼리 준비 
-			String sql = "select password from board where num = ?";
+			String sql = "select password from sys.board where num = ?";
 			
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, num);
@@ -317,7 +317,7 @@ public class BoardDAO {
 		
 		getCon();
 		try {
-			String sql = "update board set subject = ?,content = ? where num = ?";
+			String sql = "update sys.board set subject = ?,content = ? where num = ?";
 			pstmt = con.prepareStatement(sql);
 			//값을 대입 
 			pstmt.setString(1, bean.getSubject());
@@ -337,6 +337,30 @@ public class BoardDAO {
 		
 		
 	}
+	
+	//하나의 게시글을 삭제하는 메소드
+	public void deleteBoard(int num) {
+		
+		getCon();
+		
+		try {
+			
+			//쿼리준비 
+			String sql  = "delete from sys.board where num=?";
+			pstmt = con.prepareStatement(sql);
+			//?
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+			con.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
 	
 	
 	
