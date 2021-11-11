@@ -81,7 +81,7 @@ public class BoardDAO {
 	
 	}
 	
-		public Vector <BoardBean> getAllBoard(){
+		public Vector <BoardBean> getAllBoard(int start,int end){
 			
 			Vector<BoardBean> v = new Vector<BoardBean>();
 			getCon();
@@ -89,10 +89,10 @@ public class BoardDAO {
 			
 			try {
 				
-				String sql = "select * from sys.board order by ref desc,re_step asc";
+				String sql = "select * from board order by ref desc,re_step asc";
 				
 				pstmt = con.prepareStatement(sql);
-				
+			
 				rs = pstmt.executeQuery();
 				
 				while(rs.next()) {
@@ -359,6 +359,36 @@ public class BoardDAO {
 		}
 		
 		
+	}
+	
+	//전체 글의 갯수를 리턴하는 메소드 
+	public int getAllCount() {
+		
+		getCon();
+		//게시글 전체수를 저장하는 변수 
+		int count = 0;
+		
+		try {
+			
+			String sql = "select count(*) from sys.board";
+			
+			pstmt = con.prepareStatement(sql);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				
+				count = rs.getInt(1);
+				
+			}
+			con.close();
+			
+		}catch(Exception e) {
+			
+			e.printStackTrace();
+			
+		}
+		return count;
 	}
 	
 	
